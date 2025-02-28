@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 7.0f;
     public float rotationSpeed = 10f;
 
+
+
     #region Variables: Ground
     [Header("Ground Check")]
     public float GroundedOffset = -0.05f;
@@ -19,9 +22,11 @@ public class PlayerMovement : MonoBehaviour
     bool isGrounded;
 
     private bool isJumping;
+    private bool canJump = true;
     #endregion
     public bool IsGrounded => isGrounded;
     public Rigidbody Rb => rb;
+    public Vector3 MoveDirection => moveDirection;
 
     private void Awake()
     {
@@ -34,12 +39,13 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleMovementInput();
         // Check jump if player is grounded
-        if (isGrounded && inputHandler.JumpTriggered)
+        if (isGrounded && inputHandler.JumpTriggered && canJump)
         {
             Jump();
         }
-
         UpdateAnimator();
+        CheckJump();
+
     }
 
     private void FixedUpdate()
@@ -78,28 +84,39 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         isGrounded = false;
-        inputHandler.ResetJumpTrigger();
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         animator.SetTrigger("jump");
     }
+    private void CheckJump()
+    {
+        if (rb.velocity.y > 0.1f)
+        {
+            canJump = false;
+            return;
+        }
+        canJump = true;
+        inputHandler.ResetJumpTrigger();
+    }
     private void CheckGrounded()
     {
+        if (rb.velocity.y > 0.1f) return;
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
             transform.position.z);
         isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
             QueryTriggerInteraction.Ignore);
-    }
-    private void OnDrawGizmosSelected()
-    {
-        Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
-        Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-        if (isGrounded) Gizmos.color = transparentGreen;
-        else Gizmos.color = transparentRed;
+        /*    private void OnDrawGizmosSelected()
+            {
+                Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
+                Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-        // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-        Gizmos.DrawSphere(
-            new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
-            GroundedRadius);
+                if (isGrounded) Gizmos.color = transparentGreen;
+                else Gizmos.color = transparentRed;
+
+                // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
+                Gizmos.DrawSphere(
+                    new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
+                    GroundedRadius);
+            }*/
     }
 }

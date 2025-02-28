@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Android;
 
 public class PlayerInputHandler : MonoBehaviour
 {
     private InputAction moveAction;
     private InputAction jumpAction;
 
+    public Joystick joystick;
     public Vector2 MoveInput { get; private set; }
     public bool JumpTriggered { get; private set; }
 
@@ -31,10 +33,21 @@ public class PlayerInputHandler : MonoBehaviour
         moveAction.canceled -= OnMoveCanceled;
         jumpAction.started -= OnJumpStarted;
     }
-
+    private void Update()
+    {
+        // Check if joystick is not null and if it is being used
+        if (joystick != null && (Mathf.Abs(joystick.Horizontal) > 0.1f || Mathf.Abs(joystick.Vertical) > 0.1f))
+        {
+            MoveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
+        }
+    }
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
-        MoveInput = context.ReadValue<Vector2>();
+
+        if (joystick == null || (Mathf.Abs(joystick.Horizontal) < 0.1f && Mathf.Abs(joystick.Vertical) < 0.1f))
+        {
+            MoveInput = context.ReadValue<Vector2>();
+        }
     }
 
     private void OnMoveCanceled(InputAction.CallbackContext context)
@@ -46,7 +59,10 @@ public class PlayerInputHandler : MonoBehaviour
     {
         JumpTriggered = true;
     }
-
+    public void OnJumpButtonPressed()
+    {
+        JumpTriggered = true;
+    }
     public void ResetJumpTrigger()
     {
         JumpTriggered = false;
