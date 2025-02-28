@@ -45,12 +45,10 @@ public class PlayerInputHandler : MonoBehaviour
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
         JumpTriggered = true;
-        Debug.Log("Jump Triggered");
     }
 
     public void ResetJumpTrigger()
     {
         JumpTriggered = false;
-        Debug.Log("Jump Reset");
     }
 }

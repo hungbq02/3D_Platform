@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class SpawnTile : MonoBehaviour
 {
-    public GameObject tilePrefab; // Prefab của tile
-    public float offsetY = 1.0f;  // Khoảng cách giữa các tile theo Y
-    public GameObject parent;      // Parent của tile
+    public GameObject tilePrefab;
+    public float offsetY = 1.0f;
+    public GameObject parent;
 
     void Start()
     {
+        parent = GameObject.Find("TileSpawn");
         SpawnTilesBelow();
     }
 
@@ -17,15 +18,13 @@ public class SpawnTile : MonoBehaviour
     {
         if (tilePrefab == null)
         {
-            Debug.LogError("TilePrefab chưa được gán trong TileSpawner!");
             return;
         }
 
-        // Vị trí của tile hiện tại
         Vector3 currentPos = transform.position;
 
         // Tạo 2 tile bên dưới
-        Instantiate(tilePrefab, currentPos + new Vector3(0, -offsetY, 0), Quaternion.identity);
-        Instantiate(tilePrefab, currentPos + new Vector3(0, -2 * offsetY, 0), Quaternion.identity);
+        Instantiate(tilePrefab, currentPos + new Vector3(0, -offsetY, 0), Quaternion.identity, parent.transform);
+        Instantiate(tilePrefab, currentPos + new Vector3(0, -2 * offsetY, 0), Quaternion.identity, parent.transform);
     }
 }

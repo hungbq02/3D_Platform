@@ -13,14 +13,15 @@ public class PlayerMovement : MonoBehaviour
 
     #region Variables: Ground
     [Header("Ground Check")]
-
-    public float GroundedOffset = -0.1f;
-    public float GroundedRadius = 0.13f;
+    public float GroundedOffset = -0.05f;
+    public float GroundedRadius = 0.07f;
     public LayerMask GroundLayers;
     bool isGrounded;
 
     private bool isJumping;
     #endregion
+    public bool IsGrounded => isGrounded;
+    public Rigidbody Rb => rb;
 
     private void Awake()
     {
@@ -32,7 +33,6 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         HandleMovementInput();
-        isGrounded = IsGrounded();
         // Check jump if player is grounded
         if (isGrounded && inputHandler.JumpTriggered)
         {
@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        CheckGrounded();
         RotatePlayer();
         MovePlayer();
     }
@@ -76,27 +77,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        animator.SetTrigger("jump");
         isGrounded = false;
         inputHandler.ResetJumpTrigger();
-
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        animator.SetTrigger("jump");
     }
-    public bool IsGrounded()
+    private void CheckGrounded()
     {
-        // set sphere position, with offset
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
             transform.position.z);
-        return Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
+        isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
             QueryTriggerInteraction.Ignore);
     }
-
     private void OnDrawGizmosSelected()
     {
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
         Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-        if (IsGrounded()) Gizmos.color = transparentGreen;
+        if (isGrounded) Gizmos.color = transparentGreen;
         else Gizmos.color = transparentRed;
 
         // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
