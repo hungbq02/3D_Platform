@@ -1,9 +1,10 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerEffect : MonoBehaviour
 {
-    public GameObject smokeEffect;
+    public Pooler smokePool;          
     public float smokeCooldown = 0.5f;
 
     private float lastSmokeTime = 0f;
@@ -24,6 +25,18 @@ public class PlayerEffect : MonoBehaviour
     }
     void SpawnSmoke()
     {
-        Instantiate(smokeEffect, new Vector3(transform.position.x, 1.1f, transform.position.z), Quaternion.identity);
+        GameObject smoke = smokePool.GetObject();
+        if (smoke != null)
+        {
+            smoke.transform.position = new Vector3(transform.position.x, 1.1f, transform.position.z);
+            smoke.transform.rotation = Quaternion.identity;
+            smoke.SetActive(true);
+            StartCoroutine(ReturnSmoke(smoke));
+        }
+    }
+    private IEnumerator ReturnSmoke(GameObject smoke)
+    {
+        yield return new WaitForSeconds(0.5f);
+        smokePool.ReturnObject(smoke);
     }
 }

@@ -19,9 +19,8 @@ public class PlayerMovement : MonoBehaviour
     public float GroundedOffset = -0.05f;
     public float GroundedRadius = 0.07f;
     public LayerMask GroundLayers;
-    bool isGrounded;
+    bool isGrounded = true;
 
-    private bool isJumping;
     private bool canJump = true;
     #endregion
     public bool IsGrounded => isGrounded;
@@ -63,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-        rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + moveSpeed * Time.fixedDeltaTime * moveDirection);
     }
 
     private void RotatePlayer()
