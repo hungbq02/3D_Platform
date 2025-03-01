@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public static event Action OnPlayerDeath;
+
     public float deathYLimit = -1.5f;
     private bool isDead = false;
 
@@ -32,6 +34,9 @@ public class PlayerHealth : MonoBehaviour
         isDead = true;
         animator.SetTrigger("die");
         playerMovement.enabled = false;
+
+        // notice to the event registration class OnPlayerDeath
+        OnPlayerDeath?.Invoke();
     }
 
 }

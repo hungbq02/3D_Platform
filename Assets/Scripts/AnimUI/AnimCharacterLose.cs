@@ -24,10 +24,15 @@ public class AnimCharacterLose : MonoBehaviour
     private void OnEnable()
     {
         transform.localScale = Vector3.zero;
+        transform.localScale = originalScale;
+        transform.rotation = originalRotation;
 
         StartCoroutine(PlayEffect());
     }
+/*    private void OnDisable()
+    {
 
+    }*/
     private IEnumerator PlayEffect()
     {
         float elapsedTime = 0f;
