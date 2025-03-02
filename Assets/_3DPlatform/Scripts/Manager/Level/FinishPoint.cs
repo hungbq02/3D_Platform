@@ -7,16 +7,15 @@ public class FinishPoint : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
+            LevelManager.Instance.CheckHighestLevelUnlock(LevelManager.Instance.currentLevel + 1);
             if (goToNextLevel)
             {
                 SceneController.Instance.NextLevel();
-                Debug.Log("Next Level");
 
             }
             else
             {
                 SceneController.Instance.RestartLevel();
-                Debug.Log("Restart");
             }
 
         }

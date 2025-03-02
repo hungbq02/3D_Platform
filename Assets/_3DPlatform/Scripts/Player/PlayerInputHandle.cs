@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Android;
 
 public class PlayerInputHandler : MonoBehaviour
 {
     private InputAction moveAction;
     private InputAction jumpAction;
+
+    public bool useKeyboardInput = true;
 
     public Joystick joystick;
     public Vector2 MoveInput { get; private set; }
@@ -36,10 +37,18 @@ public class PlayerInputHandler : MonoBehaviour
     private void Update()
     {
         // Check if joystick is not null and if it is being used
-        if (joystick != null && (Mathf.Abs(joystick.Horizontal) > 0.1f || Mathf.Abs(joystick.Vertical) > 0.1f))
+        if (!useKeyboardInput && joystick != null)
         {
-            MoveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
+            if (Mathf.Abs(joystick.Horizontal) > 0.1f || Mathf.Abs(joystick.Vertical) > 0.1f)
+            {
+                MoveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
+            }
+            else
+            {
+                MoveInput = Vector2.zero;
+            }
         }
+
     }
     private void OnMovePerformed(InputAction.CallbackContext context)
     {

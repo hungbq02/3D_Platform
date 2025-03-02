@@ -1072,6 +1072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef920e3ca6b6604e96948a8f6b8f159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
   moveSpeed: 4
   jumpForce: 10
   rotationSpeed: 10
@@ -1119,6 +1120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bf5d0be46ae5144dac3d16b0cee9e71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useKeyboardInput: 0
   joystick: {fileID: 0}
 --- !u!136 &284511234884943968
 CapsuleCollider:

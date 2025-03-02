@@ -16,7 +16,6 @@ public class FallingObstacle : MonoBehaviour
     {
         if (transform.position.y <= fallLimitY)
         {
-            Debug.Log("Falling");
             rb.useGravity = false;
             rb.isKinematic = true;
         }

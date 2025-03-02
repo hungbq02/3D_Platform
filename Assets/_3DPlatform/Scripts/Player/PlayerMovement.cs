@@ -33,8 +33,6 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
 
     }
-
-
     private void Update()
     {
         HandleMovementInput();

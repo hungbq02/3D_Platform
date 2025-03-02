@@ -32,8 +32,13 @@ public class SceneController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         animTransition.SetTrigger("start");
     }
+
     public void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void LoadHome()
+    {
+        SceneManager.LoadScene(0);
     }
 }

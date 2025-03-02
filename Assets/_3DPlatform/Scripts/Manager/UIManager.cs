@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public GameObject loseScreen;
+    public GameObject characterUI;
     public float delayBeforeShowLoseScreen = 1.0f;
 
     private void OnEnable()
@@ -27,6 +28,7 @@ public class UIManager : MonoBehaviour
         if (loseScreen != null)
         {
             loseScreen.SetActive(true);
+            characterUI.SetActive(true);
         }
     }
 }
